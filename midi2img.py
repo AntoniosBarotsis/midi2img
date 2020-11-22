@@ -36,7 +36,7 @@ def get_notes(notes_to_parse):
 
     return {"start":start, "pitch":notes, "dur":durations}
 
-def midi2image(midi_path):
+def midi2image(midi_path, reps):
     mid = converter.parse(midi_path)
 
     instruments = instrument.partitionByInstrument(mid)
@@ -69,7 +69,7 @@ def midi2image(midi_path):
         index = 0
         prev_index = 0
         repetitions = 0
-        while repetitions < int(sys.argv[2]):
+        while repetitions < int(reps):
             if prev_index >= len(values["pitch"]):
                 break
 
@@ -93,10 +93,34 @@ def midi2image(midi_path):
                     prev_index = i
                     break
 
-            imwrite(midi_path.split("/")[-1].replace(".mid",f"_{instrument_name}_{index}.png"),matrix)
+            if (np.all(matrix == 0) or "piano" not in instrument_name.lower() or is_almost_empty(matrix)):
+                index += 1
+                repetitions+=1
+                continue;
+
+            imwrite("imgOut/" + midi_path.split("/")[-1].replace(".mid",f"_{instrument_name}_{index}.png"),matrix)
             index += 1
             repetitions+=1
 
-import sys
-midi_path = sys.argv[1]
-midi2image(midi_path)
+def main_midi(midi_path, reps):
+    import sys
+    midi2image(midi_path, reps)
+
+def is_almost_empty(matrix):
+    count = 0
+    maxCount = 0
+    for i in range(0, matrix[0].size):
+        if np.all(matrix[:,i] == 0):
+            count = count + 1
+            
+            if maxCount < count:
+              maxCount = count
+        else:
+            count = 0
+
+    # return maxCount > 18;
+    return False
+
+# import sys
+# midi_path = sys.argv[1]
+# midi2image(midi_path)

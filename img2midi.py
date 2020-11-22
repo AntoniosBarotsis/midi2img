@@ -20,7 +20,7 @@ def updateNotes(newNotes,prevNotes):
             res[note] = resolution
     return res
 
-def image2midi(image_path):
+def image2midi(image_path, outputDir):
     with Image.open(image_path) as image:
         im_arr = np.fromstring(image.tobytes(), dtype=np.uint8)
         try:
@@ -71,9 +71,12 @@ def image2midi(image_path):
 
     midi_stream = stream.Stream(output_notes)
 
-    midi_stream.write('midi', fp=image_path.split("/")[-1].replace(".png",".mid"))
+    midi_stream.write('midi', fp=f"{outputDir}/"+image_path.split("/")[-1].replace(".png",".mid"))
 
-import sys
-image_path = sys.argv[1]
-image2midi(image_path)
+def main_img(image_path, outputDir = "midiOut"):
+    import sys
+    image2midi(image_path, outputDir)
 
+# import sys
+# image_path = sys.argv[1]
+# image2midi(image_path, outputDir)
