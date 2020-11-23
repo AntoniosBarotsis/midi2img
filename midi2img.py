@@ -37,8 +37,14 @@ def get_notes(notes_to_parse):
     return {"start":start, "pitch":notes, "dur":durations}
 
 def midi2image(midi_path, reps):
-    mid = converter.parse(midi_path)
-
+    try:
+        mid = converter.parse(midi_path)
+    except Exception:
+        f = open("out.log", "a")
+        f.write(f"FAILING PATH: {midi_path}")
+        f.close()
+        return
+        
     instruments = instrument.partitionByInstrument(mid)
 
     data = {}
@@ -53,8 +59,7 @@ def midi2image(midi_path, reps):
                 i+=1
             else:
                 data[instrument_i.partName] = get_notes(notes_to_parse)
-
-    except:
+    except Exception:
         notes_to_parse = mid.flat.notes
         data["instrument_0".format(i)] = get_notes(notes_to_parse)
 
@@ -72,6 +77,12 @@ def midi2image(midi_path, reps):
         while repetitions < int(reps):
             if prev_index >= len(values["pitch"]):
                 break
+
+            # Filter out songs that do not include piano here to save time
+            if "piano" not in instrument_name.lower():
+                index += 1
+                repetitions+=1
+                continue
 
             matrix = np.zeros((upperBoundNote-lowerBoundNote,maxSongLength))
 
@@ -93,12 +104,19 @@ def midi2image(midi_path, reps):
                     prev_index = i
                     break
 
-            if (np.all(matrix == 0) or "piano" not in instrument_name.lower() or is_almost_empty(matrix)):
+            # Remove empty and nearly empty images
+            if (np.all(matrix == 0) or is_almost_empty(matrix)):
                 index += 1
                 repetitions+=1
                 continue
 
-            imwrite("imgOut/" + midi_path.split("/")[-1].replace(".mid",f"_{instrument_name}_{index}.png"),matrix)
+            try:
+                imwrite("imgOut/" + midi_path.split("/")[-1].replace(".mid",f"_{instrument_name}_{index}.png"),matrix)
+            except Exception:
+                f = open("out.log", "a")
+                f.write(midi_path.split("/")[-1].replace(".mid",f"_{instrument_name}_{index}.png") + "\n")
+                f.close()
+
             index += 1
             repetitions+=1
 
