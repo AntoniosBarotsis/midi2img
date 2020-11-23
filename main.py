@@ -43,7 +43,6 @@ bar = Bar('Converting midi files to images', max=len(files))
 for i in range(len(files)):
      with suppress_stdout_stderr():
         main_midi(f"midiFiles/{files[i]}", 100)
-        open('out.log', 'a').write("\n").close()
         bar.next()
 
 bar.finish()
@@ -68,3 +67,6 @@ for i in files:
         os.remove(f"midiFiles/{i}")
 
 print("\033[032m✓\033[0m Done")
+
+if os.stat("file").st_size == 0:
+    print("out.log updated!")
