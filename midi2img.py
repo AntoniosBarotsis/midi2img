@@ -96,7 +96,7 @@ def midi2image(midi_path, reps):
             if (np.all(matrix == 0) or "piano" not in instrument_name.lower() or is_almost_empty(matrix)):
                 index += 1
                 repetitions+=1
-                continue;
+                continue
 
             imwrite("imgOut/" + midi_path.split("/")[-1].replace(".mid",f"_{instrument_name}_{index}.png"),matrix)
             index += 1

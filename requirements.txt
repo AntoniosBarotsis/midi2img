@@ -1,0 +1,5 @@
+numpy==1.19.3
+imageio
+progress
+music21
+Pillow
