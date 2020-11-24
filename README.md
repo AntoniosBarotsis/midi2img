@@ -3,6 +3,7 @@
 The original repository can be found [here](https://github.com/mathigatti/midi2img).
 
 - ## What does this fork do?
+
   I created this repository as a way to mine data samples for a future machine learning project of mine. 
 
   I manually downloaded about 2k songs in ``midi`` format and I wanted to adjust their format to something more interpretable by a neural network
@@ -11,6 +12,7 @@ The original repository can be found [here](https://github.com/mathigatti/midi2i
   The obvious part is that I want images instead of audio/binary files as I believe those will be easier to work with. 
 
   The main new features found in this fork are the following:
+
   - All midi files that do not include piano instructions are filtered out
   - The images that are nearly empty are also filtered out as they would be bad training data (the *nearly empty* part is decided by counting how many vertical lines intersect no points in each image. I settled for a threshold of 18 as in, if there are more than 18 vertical lines with no intersections, the image gets discarded)
   - The elephant in the room; The file structure
