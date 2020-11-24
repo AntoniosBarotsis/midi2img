@@ -136,8 +136,7 @@ def is_almost_empty(matrix):
         else:
             count = 0
 
-    # return maxCount > 18;
-    return False
+    return maxCount > 18;
 
 # import sys
 # midi_path = sys.argv[1]

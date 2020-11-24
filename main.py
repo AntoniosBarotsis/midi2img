@@ -68,5 +68,5 @@ for i in files:
 
 print("\033[032m✓\033[0m Done")
 
-if os.stat("file").st_size == 0:
+if os.stat("out.log").st_size == 0:
     print("out.log updated!")
