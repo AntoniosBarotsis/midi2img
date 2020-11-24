@@ -28,12 +28,20 @@ def helper(i, images):
 
 files = os.listdir("midiFiles")
 images = os.listdir("imgOut")
+midiOut = os.listdir("midiOut")
+midiFinal = os.listdir("midiFinal")
 
 # Cleans up the image directory
 if len(images) > 0:
-    with Bar('Cleaning directories', max=len(images)) as bar:
+    with Bar('Cleaning directories', max=len(images)+len(midiOut)+len(midiFinal)) as bar:
         for f in images:
             os.remove(f"imgOut/{f}")
+            bar.next()
+        for f in midiOut:
+            os.remove(f"midiOut/{f}")
+            bar.next()
+        for f in midiFinal:
+            os.remove(f"midiFinal/{f}")
             bar.next()
 
 print("\033[032m✓\033[0m Done\n")
